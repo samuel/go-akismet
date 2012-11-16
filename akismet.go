@@ -71,8 +71,6 @@ func (a *Akismet) post(cmd string, vals url.Values) (*http.Response, error) {
 	return res, err
 }
 
-// [X-Akismet-Server:[192.168.7.149] X-Akismet-Debug-Help:[We were unable to parse your blog URI]
-// X-Spam-Requestid:[L/duyRkst5Yha89r6qYnTKRO3/IgP+9tb0hq0ZUYD7Q=]]
 func (a *Akismet) VerifyKey() (bool, error) {
 	res, err := a.post("verify-key", url.Values{"key": {a.key}, "blog": {a.blog}})
 	if err != nil {
