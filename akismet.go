@@ -8,11 +8,10 @@ import (
 	"net/url"
 )
 
-const userAgent = "go-akismet/0.1"
+const userAgent = "go-akismet/1.0"
 
 const (
 	AkismetDomain = "rest.akismet.com"
-	TypePadDomain = "api.antispam.typepad.com"
 )
 
 type ErrUnexpectedHttpResponse struct {
@@ -35,7 +34,7 @@ type Akismet struct {
 	apiDomain string
 }
 
-func New(apiKey string, blog string, apiDomain string) (*Akismet, error) {
+func New(apiKey string, blog string) (*Akismet, error) {
 	if apiKey == "" {
 		return nil, errors.New("akismet: apiKey must not be blank")
 	}
@@ -45,8 +44,13 @@ func New(apiKey string, blog string, apiDomain string) (*Akismet, error) {
 	return &Akismet{
 		key:       apiKey,
 		blog:      blog,
-		apiDomain: apiDomain,
+		apiDomain: AkismetDomain,
 	}, nil
+}
+
+// Set the domain for the API (default to AkismetDomain)
+func (a *Akismet) SetDomain(domain string) {
+	a.apiDomain = domain
 }
 
 func (a *Akismet) post(cmd string, vals url.Values) (*http.Response, error) {
